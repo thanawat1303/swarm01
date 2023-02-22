@@ -34,6 +34,8 @@
         
     ในเครื่อง Manage มาทำการรันเพื่อเชื่อมต่อ swarm
 
+ 4. ทำการเตรียมไฟล์ docker-compose.yml
+
 ### Remote Repo on LINUX
  1. ทำการสร้างไฟล์ README.md ใน Repo 
  2. git clone <URL GIT Repo>

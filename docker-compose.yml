@@ -1,18 +1,32 @@
 version: '3.8'
 services:
   web:
-    build:
-      context: app
-      target: builder
+    image: php:8.0.9-apache
+    command: 
+      - /bin/sh 
+      - -c 
+      - |
+        touch index.php
+        echo "<center>WELCOME</center>" >> index.php
+        echo "<center>SPCN19</center>" >> index.php
+        apache2-foreground
     logging:
       driver: json-file
     ports: 
       - '80:80'
     volumes:
-      - ./app:/var/www/html/
+      - app:/var/www/html/
+    container_name: apache2
     deploy:
       replicas: 1
       resources:
+        reservations:
+          cpus: '0.01'
+          memory: '10m'
         limits:
           cpus: '0.4'
           memory: '64m'
+
+volumes:
+  app:
+    external: false
