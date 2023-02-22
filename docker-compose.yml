@@ -1,12 +1,18 @@
 services:
-  api:
+  web:
     build:
-      context: .
+      context: app
       target: builder
-    container_name: fastapi-application
-    enviconment:
-      PORT: 8000
-    ports:
-      - '8000:8000'
-    restart: 'no'
-   
+    ports: 
+      - '80:80'
+    volumes:
+      - ./app:/var/www/html/
+    deploy:
+      replicas: 1
+      resources:
+        reservation:
+          cpus: '0.1'
+          memory: 10m
+        limits:
+          cpus: '0.4'
+          memory: 64m
