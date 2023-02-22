@@ -1,7 +1,9 @@
 version: '3.8'
 services:
   web:
-    image: --platform=$BUILDPLATFORM php:8.0.9-apache
+    build:
+      context: app
+      target: builder
     logging:
       driver: json-file
     ports: 
