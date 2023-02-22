@@ -13,9 +13,6 @@ services:
     deploy:
       replicas: 1
       resources:
-        reservation:
-          cpus: '0.1'
-          memory: '10m'
         limits:
           cpus: '0.4'
           memory: '64m'
