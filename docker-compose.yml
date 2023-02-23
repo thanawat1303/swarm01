@@ -25,7 +25,7 @@ services:
           memory: '10m'
         limits:
           cpus: '0.4'
-          memory: '64m'
+          memory: '40m'
 
 volumes:
   app:
