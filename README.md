@@ -35,6 +35,8 @@
     ในเครื่อง Manage มาทำการรันเพื่อเชื่อมต่อ swarm
 
  4. ทำการเตรียมไฟล์ docker-compose.yml
+ 5. ทำการ Remote ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 5. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github
 
 ### Remote Repo on LINUX
  1. ทำการสร้างไฟล์ README.md ใน Repo 

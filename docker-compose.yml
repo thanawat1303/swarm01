@@ -6,9 +6,13 @@ services:
       - /bin/sh 
       - -c 
       - |
-        touch index.php
-        # echo "<center>WELCOME</center>" >> index.php
-        # echo "<center>SPCN19</center>" >> index.php
+        File=index.php
+        if [ -f "$File" ]; then
+        echo "$File exist"
+        else
+        echo "<center>WELCOME</center>" >> index.php
+        echo "<center>SPCN19</center>" >> index.php
+        fi
         apache2-foreground
     logging:
       driver: json-file
