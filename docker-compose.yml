@@ -7,8 +7,8 @@ services:
       - -c 
       - |
         touch index.php
-        echo "<center>WELCOME</center>" >> index.php
-        echo "<center>SPCN19</center>" >> index.php
+        # echo "<center>WELCOME</center>" >> index.php
+        # echo "<center>SPCN19</center>" >> index.php
         apache2-foreground
     logging:
       driver: json-file
