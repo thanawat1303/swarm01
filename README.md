@@ -1,7 +1,7 @@
 # swarm01
 ## ขั้นตอนการติดตั้ง และใช้งาน ใน VM
- 1. ทำ clone Template 
-   โดยใน Template
+ 1. Set Template 
+
    set Hostname
     
     hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ"
