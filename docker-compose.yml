@@ -1,6 +1,6 @@
-version: '3.8'
+version: '3.3'
 services:
-  web:
+  test-volume:
     image: php:8.0.9-apache
     command: 
       - /bin/sh 
@@ -14,23 +14,35 @@ services:
         echo "<center>SPCN19</center>" >> index.php
         fi
         apache2-foreground
+    networks:
+     - webproxy
     logging:
       driver: json-file
-    ports: 
-      - '80:80'
+      options:
+        "max-size": "10m"
+        "max-file": "5"
     volumes:
       - app:/var/www/html/
     container_name: apache2
     deploy:
       replicas: 1
+      labels:
+        - traefik.docker.network=webproxy
+        - traefik.enable=true
+        - traefik.http.routers.spcn19apache-https.entrypoints=websecure
+        - traefik.http.routers.spcn19apache-https.rule=Host("spcn19apache.xops.ipv9.me")
+        - traefik.http.routers.spcn19apache-https.tls.certresolver=default
+        - traefik.http.services.spcn19apache.loadbalancer.server.port=80
       resources:
         reservations:
-          cpus: '0.01'
-          memory: '10m'
+          cpus: '0.1'
+          memory: 10M
         limits:
           cpus: '0.4'
-          memory: '40m'
-
+          memory: 50M
+networks:
+  webproxy:
+    external: true
 volumes:
   app:
     external: false

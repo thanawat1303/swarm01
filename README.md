@@ -1,10 +1,6 @@
 # swarm01
-## ขั้นตอนการติดตั้ง และใช้งาน ใน VM
+### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
-
-   set Hostname
-    
-    hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ"
 
    set time
 
@@ -26,18 +22,27 @@
     apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #ติดตั้ง Docker
 
     reboot
-      
- 2. Reset Machine ID เพื่อขอ Public IP จาก DHCP
- 3. ทำการนำ Url Token จากคำสั่ง 
+
+ 2. Set Hostname 
+
+    hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ" => spcn19-swarm01
+
+ 3. Reset Machine ID เพื่อขอ Public IP จาก DHCP
+ 4. ทำการนำ Url Token จากคำสั่ง 
  
-        docker swarm init 
+    docker swarm init 
         
     ในเครื่อง Manage มาทำการรันเพื่อเชื่อมต่อ swarm
 
- 4. ทำการเตรียมไฟล์ docker-compose.yml
- 5. ทำการ Remote ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 5. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github
+ 5. ทำการเตรียมไฟล์ docker-compose.yml
+    - image => ใช้ image จาก DockerFile
+ 6. ทำการ Remote ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 7. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github
 
 ### Remote Repo on LINUX
  1. ทำการสร้างไฟล์ README.md ใน Repo 
  2. git clone <URL GIT Repo>
+
+### Ref
+
+- https://github.com/docker/awesome-compose/tree/master/apache-php
