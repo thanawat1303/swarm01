@@ -8,12 +8,12 @@ services:
       - |
         apt-get update
         apt-get install -y --no-install-recommends git
+        apt-get install wget
         File=index.php
         if [ -f "$File" ]; then
         echo ""
         else
-        echo "<center>WELCOME</center>" > index.php
-        echo "<center>SPCN19</center>" >> index.php
+        wget https://raw.githubusercontent.com/thanawat1303/swarm01/main/app/index.php
         fi
         apache2-foreground
     networks:
