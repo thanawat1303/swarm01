@@ -6,6 +6,8 @@ services:
       - /bin/sh 
       - -c 
       - |
+        apt-get update
+        apt-get install -y --no-install-recommends git
         File=index.php
         if [ -f "$File" ]; then
         echo ""
