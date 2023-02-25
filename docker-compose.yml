@@ -11,8 +11,6 @@ services:
         apt-get install wget
         File=index.php
         if [ -f "$File" ]; then
-        rm index.php
-        wget https://raw.githubusercontent.com/thanawat1303/swarm01/main/app/index.php
         echo ""
         else
         wget https://raw.githubusercontent.com/thanawat1303/swarm01/main/app/index.php
