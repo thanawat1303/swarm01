@@ -9,8 +9,7 @@ services:
         apt-get update
         apt-get install -y --no-install-recommends git
         apt-get install wget
-        File=index.php
-        if [ -f "$File" ]; then
+        if [ -f "index.php" ]; then
         echo ""
         else
         wget https://raw.githubusercontent.com/thanawat1303/swarm01/main/app/index.php
