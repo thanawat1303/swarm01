@@ -61,9 +61,9 @@
     ```
 
  10. push Image to DockerHub
-    ```
-    docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
-    ```
+     ```
+     docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
+     ```
 
  11. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
     `อ้างอิงข้อมูล image และ command จาก DockerFile`
