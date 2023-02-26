@@ -97,7 +97,6 @@
         - external => กำหนดสถานะของ network ที่อยู่ภายใน host
     - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
       - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
-        - external => กำหนดสถานะของที่เก็บข้อมูลที่อยู่ภายใน host
  12. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
  13. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
  14. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
