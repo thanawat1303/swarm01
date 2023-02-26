@@ -49,7 +49,7 @@
 
  5. [ทำการเตรียม stack swarm](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
- 7. [ทำการนำไฟล์ตัวอย่างมาทำการ Build โดยในไฟล์ compose ทำการนำ volume ออก เพื่อเตรียมเพิ่มข้อมูลใหม่เข้าไป](#ref-1)
+ 7. [ทำการนำไฟล์ตัวอย่างมาทำการ Build โดยในไฟล์ compose ทำการนำ volume ออก เพื่อเตรียมเพิ่มข้อมูลใหม่เข้าไป](#ref-ตัวอย่าง-application)
  8. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
     ```
     docker cp index.php <Container ID>:/var/www/html #copy ไฟล์เข้าสู่ container ด้วยคำสั่ง 
@@ -74,7 +74,6 @@
         - networks => เน็ตเวิร์คของ Traefik
         - logging => ประวัติการทำงานของ container
           - driver => json-file คือ เลือกประเภทการ log เป็น json
-          - options => กำหนดสเปคของไฟล์ Log
         - volumes => ส่วนของการเก็บข้องมูลของ containner
           - path ที่เก็บข้อมูลภายใน host : path ที่เก็บข้อมูลภายใน container
         - container_name => ชื่อ container
