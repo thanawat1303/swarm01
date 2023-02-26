@@ -6,9 +6,6 @@ services:
      - webproxy
     logging:
       driver: json-file
-      options:
-        "max-size": "10m"
-        "max-file": "5"
     volumes:
       - app:/var/www/html/
     container_name: apache2
