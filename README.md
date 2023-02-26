@@ -43,11 +43,7 @@
     init 0
     ```
 
- 5. ทำการนำ Url Token จากคำสั่ง 
-    ```
-    docker swarm init #รันในเครื่อง Manage
-    ```
-
+ 5. [ทำการเตรียมการ stack swarm](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
  7. ทำการเตรียมไฟล์ docker-compose.yml #APPNAME => spcn19apache
     ```อ้างอิงข้อมูล image และ command จาก DockerFile```
@@ -87,6 +83,32 @@
  9. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
  10. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
  11. Deploy
+
+### Stack Swarm
+<a name="stack-swarm"></a>
+
+ - Manager Swarm
+
+   - Swarm init
+     ```
+     docker swarm init #รันในเครื่อง Manage
+     ```
+
+   - นำ Token Url ไป run บน worker ทุก Node ที่ต้องการให้เชื่อมต่อ
+
+   - Check Node Stack swarm
+     ```
+     docker node ls
+     ```
+
+   - install portainer CE
+     ```
+     curl -L https://downloads.portainer.io/ce2-17/portainer-agent-stack.yml -o portainer-agent-stack.yml
+     docker stack deploy -c portainer-agent-stack.yml portainer
+     ```
+
+   ### Ref
+   - https://github.com/pitimon/dockerswarm-inhoure#swarm-init
 
 ### Revert Proxy
 <a name="revert-proxy"></a>
