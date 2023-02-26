@@ -47,25 +47,10 @@
     init 0
     ```
 
- 5. [ทำการเตรียม stack swarm](#stack-swarm)
+ 5. [ทำการเตรียม stack swarm and Portainer CE](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
- 7. [ทำการนำไฟล์ตัวอย่างมาทำการ Build โดยในไฟล์ compose ทำการนำ volume ออก เพื่อเตรียมเพิ่มข้อมูลใหม่เข้าไป](#ref-ตัวอย่าง-application)
- 8. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
-    ```
-    docker cp index.php <Container ID>:/var/www/html #copy ไฟล์เข้าสู่ container ด้วยคำสั่ง 
-    ```
-
- 9. สร้าง image จาก container 
-    ```
-    docker commit <Container ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
-    ```
-
- 10. push Image to DockerHub
-     ```
-     docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
-     ```
-
- 11. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
+ 7. [สร้าง Image สำหรับ Stack](#create-image-stack)
+ 8. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
     `อ้างอิงข้อมูล image และ command จาก DockerFile`
     - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
     - services :
@@ -96,10 +81,32 @@
         - external => กำหนดสถานะของ network ที่อยู่ภายใน host
     - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
       - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
- 12. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
- 13. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 14. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
- 15. Deploy
+ 9. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
+ 10. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 11. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
+ 12. Deploy
+
+### Create Image on Stack
+ 1. ทำการนำไฟล์ compose.yml deploy ผ่าน Portainer CE
+ 2. check container ID
+    ```
+    docker ps
+    ```
+
+ 3. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
+    ```
+    docker cp index.php <Container ID>:/var/www/html #copy ไฟล์เข้าสู่ container ด้วยคำสั่ง 
+    ```
+
+ 4. สร้าง image จาก container 
+    ```
+    docker commit <Container ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
+    ```
+
+ 5. push Image to DockerHub
+     ```
+     docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
+     ```
 
 ### Stack Swarm
 <a name="stack-swarm"></a>

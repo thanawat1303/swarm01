@@ -1,7 +1,5 @@
 services:
   web:
-    build:
-      context: app
-      target: builder
+    image: php:8.0.9-apache #อ้างอิงจาก Dockerfile
     ports: 
       - '80:80'
