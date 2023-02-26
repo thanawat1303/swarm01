@@ -1,4 +1,6 @@
 # swarm01 apache-php
+### Ref
+- https://github.com/docker/awesome-compose/tree/master/apache-php
 ### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
 
@@ -161,6 +163,3 @@
 ### Remote Repo on LINUX
  1. ทำการสร้างไฟล์ README.md ใน Repo 
  2. git clone <URL GIT Repo>
-
-### Ref
-- https://github.com/docker/awesome-compose/tree/master/apache-php
