@@ -1,20 +1,7 @@
 version: '3.3'
 services:
   server:
-    image: php:8.0.9-apache
-    command: 
-      - /bin/sh 
-      - -c 
-      - |
-        apt-get update
-        apt-get install -y --no-install-recommends git
-        apt-get install wget
-        if [ -f "index.php" ]; then
-        echo ""
-        else
-        wget https://raw.githubusercontent.com/thanawat1303/swarm01/main/app/index.php
-        fi
-        apache2-foreground
+    image: thanawat1303/apache2-php-index:latest
     networks:
      - webproxy
     logging:
