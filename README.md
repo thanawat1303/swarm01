@@ -1,4 +1,4 @@
-# swarm01 Apache2:PHP
+# swarm01 apache-PHP
 ### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
 
