@@ -7,10 +7,13 @@
     <title>apache-php@19</title>
 </head>
 <body>
-<?php
-    echo "<center></center>"
-?>
     <center><h1>WELCOME</h1></center>
-    <center>SPCN19</center>
+    <center><p>SPCN19</p></center>
+    <center>
+        <?php
+            date_default_timezone_set("Asia/Bangkok");
+            echo date('d:m:y:H:i:s');
+        ?>
+    </center>
 </body>
 </html>
