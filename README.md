@@ -43,7 +43,7 @@
     init 0
     ```
 
- 5. [ทำการเตรียมการ stack swarm](#stack-swarm)
+ 5. [ทำการเตรียม stack swarm](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
  7. ทำการเตรียมไฟล์ docker-compose.yml #APPNAME => spcn19apache
     ```อ้างอิงข้อมูล image และ command จาก DockerFile```
