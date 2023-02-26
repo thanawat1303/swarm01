@@ -50,8 +50,7 @@
  5. [ทำการเตรียม stack swarm and Portainer CE](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
  7. [สร้าง Image สำหรับ Stack](#create-image-on-stack)
- 8. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
-    `อ้างอิงข้อมูล image และ command จาก DockerFile`
+ 8. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => `spcn19apache`
     - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
     - services :
       - server : => ชื่อของ application
@@ -81,29 +80,35 @@
         - external => กำหนดสถานะของ network ที่อยู่ภายใน host
     - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
       - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
- 9. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
- 10. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 11. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
- 12. Deploy
+ 9. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 10. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ portainer ของระบบ
+ 11. Deploy
 
 ### Create Image on Stack
- 1. ทำการนำไฟล์ compose.yml deploy ผ่าน Portainer CE
- 2. check container ID
+ 1. ทำการนำไฟล์ compose.yml deploy ผ่าน Portainer CE 
+    - compose.yml Deploy ยังไม่ทำการ mount volume เพื่อเตรียมนำข้อมูลใส่เข้าไป
+ 2. ทำการเข้าสู่ Container ของ application เพื่อทำงานคำสั่งต่าง ๆ ตาม Dockerfile
+    ```
+    docker exec -it <Container ID> bash #คำสั่งในการเข้าสู่ Container
+    ```
+
+ 3. check container ID
     ```
     docker ps
     ```
 
- 3. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
+ 4. จัดการไฟล์ index.php ใน path app/index.php สำหรับ UI ใน application
+ 5. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
     ```
     docker cp index.php <Container ID>:/var/www/html #copy ไฟล์เข้าสู่ container ด้วยคำสั่ง 
     ```
 
- 4. สร้าง image จาก container 
+ 6. สร้าง image จาก container 
     ```
     docker commit <Container ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
     ```
 
- 5. push Image to DockerHub
+ 7. push Image to DockerHub
      ```
      docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
      ```
