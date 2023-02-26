@@ -25,7 +25,7 @@
 
  2. Set Hostname 
 
-   ``` hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ" => spcn19-swarm01 ```
+   ``` hostnamectl set-hostname  ```
 
  3. Reset Machine ID เพื่อขอ Public IP จาก DHCP
  4. ทำการนำ Url Token จากคำสั่ง 
