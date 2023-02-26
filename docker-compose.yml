@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  server:
+  web:
     image: thanawat1303/apache2-php-index:latest
     networks:
      - webproxy
