@@ -1,7 +1,7 @@
 # swarm01 apache-php
 ### Url apache-php
 - https://spcn19apache.xops.ipv9.xyz/
-### Ref
+### Ref ตัวอย่าง application
 - https://github.com/docker/awesome-compose/tree/master/apache-php
 ### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
@@ -49,13 +49,28 @@
 
  5. [ทำการเตรียม stack swarm](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
- 7. ทำการเตรียมไฟล์ docker-compose.yml #APPNAME => spcn19apache
-    ```อ้างอิงข้อมูล image และ command จาก DockerFile```
+ 7. [ทำการนำไฟล์ตัวอย่างมาทำการ Build โดยในไฟล์ compose ทำการนำ volume ออก เพื่อเตรียมเพิ่มข้อมูลใหม่เข้าไป](#ref-1)
+ 8. ทำการ copy ไฟล์ index.php จาก Path app/index.php เข้าสู่ container application
+    ```
+    docker cp index.php <Container ID>:/var/www/html #copy ไฟล์เข้าสู่ container ด้วยคำสั่ง 
+    ```
+
+ 9. สร้าง image จาก container 
+    ```
+    docker commit <Container ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
+    ```
+
+ 10. push Image to DockerHub
+    ```
+    docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest
+    ```
+
+ 11. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
+    `อ้างอิงข้อมูล image และ command จาก DockerFile`
     - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
     - services :
       - server : => ชื่อของ application
-        - image => ใช้ image จาก DockerFile หรือ image ที่ต้องการใน DockerHub
-        - command => สั่งใช้งาน command หลังจากรีบูท containner เสร็จสิ้น
+        - image => image ที่ต้อง build `thanawat1303/apache2-php-index`
         - networks => เน็ตเวิร์คของ Traefik
         - logging => ประวัติการทำงานของ container
           - driver => json-file คือ เลือกประเภทการ log เป็น json
@@ -83,10 +98,10 @@
     - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
       - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
         - external => กำหนดสถานะของที่เก็บข้อมูลที่อยู่ภายใน host
- 8. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
- 9. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 10. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
- 11. Deploy
+ 12. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
+ 13. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 14. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
+ 15. Deploy
 
 ### Stack Swarm
 <a name="stack-swarm"></a>
