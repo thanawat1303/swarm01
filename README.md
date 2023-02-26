@@ -49,7 +49,7 @@
 
  5. [ทำการเตรียม stack swarm and Portainer CE](#stack-swarm)
  6. [ทำการเตรียม Revert Proxy](#revert-proxy)
- 7. [สร้าง Image สำหรับ Stack](#create-image-stack)
+ 7. [สร้าง Image สำหรับ Stack](#create-image-on-stack)
  8. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => spcn19apache
     `อ้างอิงข้อมูล image และ command จาก DockerFile`
     - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
