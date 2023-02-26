@@ -2,42 +2,139 @@
 ### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
 
-   set time
+    - set time
+      ```
+      timedatectl set-timezone Asia/Bangkok
+      ```
 
-    timedatectl set-timezone Asia/Bangkok
+    - install Docker
+      ```
+      apt update; apt upgrade -y #อัปเดตแพ็คเกจภายในเครื่อง
 
-   install Docker
+      apt-get install ca-certificates curl wget gnupg lsb-release -y #ติดตั้งแพ็คเกจ
 
-    apt update; apt upgrade -y #อัปเดตแพ็คเกจภายในเครื่อง
+      mkdir -m 0755 -p /etv/apt/keyrings
 
-    apt-get install ca-certificates curl wget gnupg lsb-release -y #ติดตั้งแพ็คเกจ
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg #ดาวโหลดไฟล์แพ็คเกจ Docker
 
-    mkdir -m 0755 -p /etv/apt/keyrings
+      echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) stable" |  tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg #ดาวโหลดไฟล์แพ็คเกจ Docker
+      apt-get update #อัปเดทไฟล์แพ็คเกจเพื่อไว้สำหรับให้ติดตั้ง
+      apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #ติดตั้ง Docker
 
-    echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) stable" |  tee /etc/apt/sources.list.d/docker.list > /dev/null
+      reboot
+      ```
 
-    apt-get update #อัปเดทไฟล์แพ็คเกจเพื่อไว้สำหรับให้ติดตั้ง
-    apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #ติดตั้ง Docker
+ 2. Clone Templete ออกมา 3 Node คือ
+    - manage
+    - work1
+    - work2
 
-    reboot
+ 3. Set Hostname
+    ```
+    hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ" #spcn19-swarm01
+    ```
 
- 2. Set Hostname 
+ 4. Reset Machine ID เพื่อขอ Public IP จาก DHCP 
+    ```
+    cp /dev/null /etc/machine-id
+    rm /var/lib/dbus/machine-id
+    ln -s /etc/machine-id /var/lib/dbus/machine-id
+    init 0
+    ```
 
-   ``` hostnamectl set-hostname  ```
+ 5. ทำการนำ Url Token จากคำสั่ง 
+    ```
+    docker swarm init #รันในเครื่อง Manage
+    ```
 
- 3. Reset Machine ID เพื่อขอ Public IP จาก DHCP
- 4. ทำการนำ Url Token จากคำสั่ง 
- 
-    docker swarm init 
-        
-    ในเครื่อง Manage มาทำการรันเพื่อเชื่อมต่อ swarm
+ 6. [ทำการเตรียม Revert Proxy](#revert-proxy)
+ 7. ทำการเตรียมไฟล์ docker-compose.yml #APPNAME => spcn19apache
+    ```อ้างอิงข้อมูล image และ command จาก DockerFile```
+    - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
+    - services :
+      - server : => ชื่อของ application
+        - image => ใช้ image จาก DockerFile หรือ image ที่ต้องการใน DockerHub
+        - command => สั่งใช้งาน command หลังจากรีบูท containner เสร็จสิ้น
+        - networks => เน็ตเวิร์คของ Traefik
+        - logging => ประวัติการทำงานของ container
+          - driver => json-file คือ เลือกประเภทการ log เป็น json
+          - options => กำหนดสเปคของไฟล์ Log
+        - volumes => ส่วนของการเก็บข้องมูลของ containner
+          - path ที่เก็บข้อมูลภายใน host : path ที่เก็บข้อมูลภายใน container
+        - container_name => ชื่อ container
+        - deploy => เซ็ตการ deploy สำหรับ swarm
+          - replicas => กำหนดเครื่อง worker ที่ต้องการให้ deploy containner ลงไป
+          - labels => กำหนด labels ให้ application โดยจะเป็นการตั้งค่าเชื่อมต่อกับ Traefik
+            - traefik.docker.network => ชื่อ network ของ Traefik
+            - traefik.enable => กำหนดสถานะการใช้งาน
+            - traefik.constraint-label => เลือก traefik ที่ต้องการให้ container ไปทำงาน
+            - traefik.http.routers.${APPNAME}-https.entrypoints => กำหนด port ในการเชื่อมต่อเมื่อมีคำขอเข้าไปที่ traefik
+            - traefik.http.routers.${APPNAME}-https.rule=Host(`${APPNAME}.xops.ipv9.xyz`) => กำหนด Domain ในการเข้าถึง application
+            - traefik.http.routers.${APPNAME}-https.tls.certresolver => กำหนดการสร้างใบรับรอง url
+            - traefik.http.services.${APPNAME}.loadbalancer.server.port => กำหนดให้มีการ balance ในการร้องขอ port ที่ container ทำงาน
+            - traefik.http.routers.${APPNAME}-https.tls => เปิดใช้งาน Protocal TLS
+          - resources => กำหนดสเปคที่ต้องการของ Containner
+            - reservations => กำหนดค่าขั้นต่ำของสเปค
+            - limits => กำหนดค่าสูงสุดของสเปค
+    - networks => กำหนด networks ที่อยู่ภายในระบบ
+      - webproxy => บริการ network revert proxy ที่อยู่ภายในระบบ
+        - external => กำหนดสถานะของ network ที่อยู่ภายใน host
+    - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
+      - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
+        - external => กำหนดสถานะของที่เก็บข้อมูลที่อยู่ภายใน host
+ 8. จัดการไฟล์ index.php ใน path app/index.php เพื่อจัดการ UI ใน application
+ 9. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 10. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ potainer ของระบบ
+ 11. Deploy
 
- 5. ทำการเตรียมไฟล์ docker-compose.yml
-    - image => ใช้ image จาก DockerFile
- 6. ทำการ Remote ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 7. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github
+### Revert Proxy
+<a name="revert-proxy"></a>
+
+ - Manager Traefik
+
+   - Set IP สำหรับเครื่อง Client
+     - แก้ไขไฟล์ hosts
+       - windows C:\Windows\System32\drivers\etc\hosts
+       - Linux /etc/hosts
+     - เพิ่ม Domain ให้แต่ละโปรแกรมโดยเชื่อมเข้าสู่ IP ของ manager เช้น "ip manage" traefik.demo.local
+
+   - สร้าง Network ใหม่
+     ```
+     docker network create --driver=overlay traefik-public
+     ```
+
+   - Get ID Node 
+     ```
+     export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}') 
+     echo $NODE_ID
+     ```
+
+   - สร้าง Label ของ Node Manage
+     ```
+     docker node update --label-add traefik-public.traefik-public-certificates=true $NODE_ID
+     ```
+
+   - set Treafik
+     ```
+     export EMAIL=user@smtp.com
+     export DOMAIN=<ชื่อ traefik domain ที่ต้องการให้เข้าถึง traefik>
+     export USERNAME=admin
+     export PASSWORD=<รหัสผ่าน traefik>
+     export HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD)
+     echo $HASHED_PASSWORD
+     ```
+
+   - deploy traefik stack
+     ```
+     docker stack deploy -c traefik-host.yml traefik
+     ```
+     
+   - ทดลองเปิดหน้า Dashboard Traefik
+
+   ### Ref
+
+   - https://github.com/pitimon/dockerswarm-inhoure/tree/main/ep03-traefik
 
 ### Remote Repo on LINUX
  1. ทำการสร้างไฟล์ README.md ใน Repo 
