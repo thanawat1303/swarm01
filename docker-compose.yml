@@ -30,4 +30,3 @@ networks:
     external: true
 volumes:
   app:
-    external: false
