@@ -80,9 +80,10 @@
         - external => กำหนดสถานะของ network ที่อยู่ภายใน host
     - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
       - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
- 9. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 10. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ portainer ของระบบ
- 11. Deploy
+ 9. ทดลอง Deploy docker-compose ด้วย image ที่สร้าง บน Cluster ของตนเอง
+ 10. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
+ 11. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ portainer ของระบบ
+ 12. Deploy
 
 ### Create Image on Dockerfile
  1. จัดการไฟล์ index.php ใน path app/index.php สำหรับ UI ใน application
