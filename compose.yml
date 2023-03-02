@@ -1,6 +1,0 @@
-version: '3.3'
-services:
-  web:
-    image: php:8.0.9-apache #อ้างอิงจาก Dockerfile
-    ports: 
-      - '80:80'

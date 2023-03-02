@@ -6,6 +6,10 @@ CMD ["apache2-foreground"]
 
 FROM builder as dev-envs
 
+COPY . ./var/www/html/
+
+EXPOSE 80
+
 RUN <<EOF
 apt-get update
 apt-get install -y --no-install-recommends git
