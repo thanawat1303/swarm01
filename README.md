@@ -88,10 +88,12 @@
  1. จัดการไฟล์ index.php ใน path app/index.php สำหรับ UI ใน application
  2. แก้ไขไฟล์ Dockerfile จากตัวอย่างให้เป็นแบบ Dockerfile ใน path app
  3. สร้าง Image จาก Dockerfile ใน path app ด้วยคำสั่ง
+ 
     ```
     docker build . -t <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest thanawat1303/apache2-php-index:v1
     ```
  4. push Image to DockerHub
+
      ```
      docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest thanawat1303/apache2-php-index:v1
      ```
