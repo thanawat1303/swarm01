@@ -1,8 +1,14 @@
 # swarm01 apache-php
+
+### Ref awaresome-compose
+- https://github.com/docker/awesome-compose/tree/master/apache-php
+
+### Wakatime project
+- https://wakatime.com/@spcn19/projects/jseztswsjz?start=2023-02-18&end=2023-03-12
+
 ### Url apache-php
 - https://spcn19apache.xops.ipv9.xyz/
-### Ref ตัวอย่าง application
-- https://github.com/docker/awesome-compose/tree/master/apache-php
+
 ### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
  1. Set Template 
 
