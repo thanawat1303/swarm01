@@ -7,7 +7,7 @@
 - https://wakatime.com/@spcn19/projects/jseztswsjz
 
 ### Url apache-php
-- https://spcn19apache.xops.ipv9.xyz/
+- https://spcn19apache.xops.ipv9.xyz
 
 ### Step on Work
  1. Set Template 
