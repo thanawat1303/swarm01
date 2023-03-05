@@ -9,43 +9,43 @@
 ### Url apache-php
 - https://spcn19apache.xops.ipv9.xyz/
 
-### ขั้นตอนการติดตั้ง และใช้งาน ใน VM
+### Step on Work
  1. Set Template 
 
-    - set time
+    - Set time
       ```
       timedatectl set-timezone Asia/Bangkok
       ```
 
-    - install Docker
+    - Install Docker
       ```
-      apt update; apt upgrade -y #อัปเดตแพ็คเกจภายในเครื่อง
+      apt update; apt upgrade -y #update packet
 
-      apt-get install ca-certificates curl wget gnupg lsb-release -y #ติดตั้งแพ็คเกจ
+      apt-get install ca-certificates curl wget gnupg lsb-release -y #install packet
 
       mkdir -m 0755 -p /etv/apt/keyrings
 
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg #ดาวโหลดไฟล์แพ็คเกจ Docker
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg #Download packet Docker
 
       echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) stable" |  tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-      apt-get update #อัปเดทไฟล์แพ็คเกจเพื่อไว้สำหรับให้ติดตั้ง
-      apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #ติดตั้ง Docker
+      apt-get update #update file packet give can install
+      apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #install Docker
 
       reboot
       ```
 
- 2. Clone Templete ออกมา 3 Node คือ
+ 2. Create node from Template
     - manage
     - work1
     - work2
 
  3. Set Hostname
     ```
-    hostnamectl set-hostname "ชื่อ Hostname โดยต้องห้ามซ้ำ" #spcn19-swarm01
+    hostnamectl set-hostname "Hostname not must duplicate" #spcn19-swarm01
     ```
 
- 4. Reset Machine ID เพื่อขอ Public IP จาก DHCP 
+ 4. Reset machine ID to request a public IP from DHCP
     ```
     cp /dev/null /etc/machine-id
     rm /var/lib/dbus/machine-id
@@ -53,76 +53,47 @@
     init 0
     ```
 
- 5. [ทำการเตรียม stack swarm and Portainer CE](#stack-swarm)
- 6. [ทำการเตรียม Revert Proxy](#revert-proxy)
- 7. [สร้าง Image จาก Dockerfile](#create-image-on-dockerfile)
- 8. ทำการเตรียมไฟล์ docker-compose.yml สำหรับ Cluster Swarm #APPNAME => `spcn19apache`
-    - version => เวอร์ชั่นของไฟล์ compose ต้อง 3 ขึ้นไป
-    - services :
-      - server : => ชื่อของ application
-        - image => image ที่ต้อง build `thanawat1303/apache2-php-index`
-        - networks => เน็ตเวิร์คของ Traefik
-        - logging => ประวัติการทำงานของ container
-          - driver => json-file คือ เลือกประเภทการ log เป็น json
-        - volumes => ส่วนของการเก็บข้องมูลของ containner
-          - path ที่เก็บข้อมูลภายใน host : path ที่เก็บข้อมูลภายใน container
-        - container_name => ชื่อ container
-        - deploy => เซ็ตการ deploy สำหรับ swarm
-          - replicas => กำหนดเครื่อง worker ที่ต้องการให้ deploy containner ลงไป
-          - labels => กำหนด labels ให้ application โดยจะเป็นการตั้งค่าเชื่อมต่อกับ Traefik
-            - traefik.docker.network => ชื่อ network ของ Traefik
-            - traefik.enable => กำหนดสถานะการใช้งาน
-            - traefik.constraint-label => เลือก traefik ที่ต้องการให้ container ไปทำงาน
-            - traefik.http.routers.${APPNAME}-https.entrypoints => กำหนด port ในการเชื่อมต่อเมื่อมีคำขอเข้าไปที่ traefik
-            - traefik.http.routers.${APPNAME}-https.rule=Host(`${APPNAME}.xops.ipv9.xyz`) => กำหนด Domain ในการเข้าถึง application
-            - traefik.http.routers.${APPNAME}-https.tls.certresolver => กำหนดการสร้างใบรับรอง url
-            - traefik.http.services.${APPNAME}.loadbalancer.server.port => กำหนดให้มีการ balance ในการร้องขอ port ที่ container ทำงาน
-            - traefik.http.routers.${APPNAME}-https.tls => เปิดใช้งาน Protocal TLS
-          - resources => กำหนดสเปคที่ต้องการของ Containner
-            - reservations => กำหนดค่าขั้นต่ำของสเปค
-            - limits => กำหนดค่าสูงสุดของสเปค
-    - networks => กำหนด networks ที่อยู่ภายในระบบ
-      - webproxy => บริการ network revert proxy ที่อยู่ภายในระบบ
-        - external => กำหนดสถานะของ network ที่อยู่ภายใน host
-    - volumes => พื้นที่เก็บข้อมูลที่จะสร้างไว้ให้อยู่บน Host
-      - app => ชื่อพื้นที่เก็บข้อมูล ภายใน host ต้องตรงตามที่กำหนดที่ volumes ที่ mount กับ contianner
- 9. ทดลอง Deploy docker-compose ด้วย image ที่สร้าง บน Cluster ของตนเอง
- 10. ทำการ Remote และ upload ไฟล์งานเข้าสู่ Repo swarm01 บน github
- 11. ทำการนำข้อมูลในไฟล์ docker-compose หรือ LINK repo github เข้ากับ portainer ของระบบ
+ 5. [Stack swarm and Portainer CE](#stack-swarm)
+ 6. [Revert Proxy](#revert-proxy)
+ 7. [Create Image of Dockerfile](#create-image-on-dockerfile)
+ 8. Create docker-compose.yml `spcn19apache`
+ 9. Deploy test docker-compose for portainer CE on Host
+ 10. Imprement remote and upload to Repo swarm01 on github
+ 11. Link repo github swarm01 in portainer.ipv9.me
  12. Deploy
 
 ### Create Image on Dockerfile
- 1. จัดการไฟล์ index.php ใน path app/index.php สำหรับ UI ใน application
- 2. แก้ไขไฟล์ Dockerfile จากตัวอย่างให้เป็นแบบ Dockerfile ใน path app
- 3. สร้าง Image จาก Dockerfile ใน path app ด้วยคำสั่ง
+ 1. Create index.php in path app/index.php for UI application
+ 2. Edit Dockerfile from exam to Dockerfile in path app
+ 3. Create image of Dockerfile in path app
  
     ```
-    docker build . -t <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest thanawat1303/apache2-php-index:v1
+    docker build . -t <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
     ```
- 4. push Image to DockerHub
+ 4. Push image to DockerHub
 
      ```
-     docker push <image ID> <usernameDockerHub>/<repo>:<tag> #หากไม่ใส่ tag จะเป็น latest thanawat1303/apache2-php-index:v1
+     docker push <image ID> <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
      ```
 
-### Stack Swarm
+### Stack Swarm and Portainer CE
 <a name="stack-swarm"></a>
 
  - Manager Swarm
 
    - Swarm init
      ```
-     docker swarm init #รันในเครื่อง Manage
+     docker swarm init #Run on manage node
      ```
 
-   - นำ Token Url ไป run บน worker ทุก Node ที่ต้องการให้เชื่อมต่อ
+   - Copy token url, after that run on every worker node
 
-   - Check Node Stack swarm
+   - Check node stack swarm
      ```
      docker node ls
      ```
 
-   - install portainer CE
+   - Install portainer CE
      ```
      curl -L https://downloads.portainer.io/ce2-17/portainer-agent-stack.yml -o portainer-agent-stack.yml
      docker stack deploy -c portainer-agent-stack.yml portainer
@@ -136,49 +107,56 @@
 
  - Manager Traefik
 
-   - Set IP สำหรับเครื่อง Client
-     - แก้ไขไฟล์ hosts
+   - Set IP for Client
+     - Edit file hosts
        - windows C:\Windows\System32\drivers\etc\hosts
        - Linux /etc/hosts
-     - เพิ่ม Domain ให้แต่ละโปรแกรมโดยเชื่อมเข้าสู่ IP ของ manager เช้น "ip manage" traefik.demo.local
+     - Add domain is a IP of manager for every application 
+       - Ex.
+         ``` 
+         "ip manage" traefik.demo.local
+         ```
 
-   - สร้าง Network ใหม่
+   - Create new network
      ```
      docker network create --driver=overlay traefik-public
      ```
 
-   - Get ID Node 
+   - Get ID node 
      ```
      export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}') 
      echo $NODE_ID
      ```
 
-   - สร้าง Label ของ Node Manage
+   - Create label of node manage
      ```
      docker node update --label-add traefik-public.traefik-public-certificates=true $NODE_ID
      ```
 
-   - set Treafik
+   - Set Treafik
      ```
      export EMAIL=user@smtp.com
-     export DOMAIN=<ชื่อ traefik domain ที่ต้องการให้เข้าถึง traefik>
+     export DOMAIN=<traefik domain that want access traefik>
      export USERNAME=admin
-     export PASSWORD=<รหัสผ่าน traefik>
+     export PASSWORD=<password traefik>
      export HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD)
      echo $HASHED_PASSWORD
      ```
 
-   - deploy traefik stack
+   - Deploy traefik stack
      ```
      docker stack deploy -c traefik-host.yml traefik
      ```
      
-   - ทดลองเปิดหน้า Dashboard Traefik
+   - Test open dashboard Traefik
 
    ### Ref
 
    - https://github.com/pitimon/dockerswarm-inhoure/tree/main/ep03-traefik
 
 ### Remote Repo on LINUX
- 1. ทำการสร้างไฟล์ README.md ใน Repo 
- 2. git clone "URL GIT Repo"
+ 1. Create file README.md in Repo swarm01
+ 2. run
+    ```
+    git clone "URL GIT Repo"
+    ```
