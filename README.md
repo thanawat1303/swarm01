@@ -58,7 +58,7 @@
  4. Click Cluster Xopx.ipv9.xyz on Portainer
  5. Click menu Stack on Cluster Xopx.ipv9.xyz
 
-<div align="center"><img src="app/image/openportainer.png" width="500px"></div>
+<div align="center"><img src="app/image/cluster.png" width="500px"></div>
 
  5. Link repo github swarm01 in portainer.ipv9.me
  6. Deploy
