@@ -14,7 +14,7 @@
  2. Create docker-compose.yml `spcn19apache`
     <details>
     <summary>show code<summary>
-    ```rudy
+    ```ruby
     version: '3.3' #version compose must than 3 
     services:
       web: #name application
@@ -61,7 +61,7 @@
  2. Create Dockerfile
     <details>
     <summary>show code</summary>
-    ```rudy
+    ```ruby
     FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder #image container
 
     WORKDIR /var/www/html/ #Set path working command on container
@@ -89,7 +89,7 @@
 
     CMD ["apache2-foreground"]
     ```
-    <details>
+    </details>
  3. Build image of Dockerfile
  
     ```
