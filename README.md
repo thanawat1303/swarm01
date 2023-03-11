@@ -64,7 +64,7 @@
     ```
 
     </details>
- 6. Push docker-compose.yml to github swarm01
+ 6. Push file to github swarm01
  7. Open https://portainer.ipv9.me/
 
 <div align="center"><img src="app/image/openportainer.png" width="500px"></div>
