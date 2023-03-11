@@ -75,11 +75,11 @@
   - Compose path = name Compose file
   - Automatic updates = enable
     - Fetch interval = time check change on compose file from github 
-    
+
  9. Click button Deploy the stack
 
 ### Create Image on Dockerfile
- 1. Create index.php is UI application
+ 1. Create index.php
     <details>
     <summary>Show code</summary>
 
@@ -141,7 +141,7 @@
     ```
 
     </details>
- 3. Build image of Dockerfile
+ 3. Build image from Dockerfile
  
     ```
     docker build . -t <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
