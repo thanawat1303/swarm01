@@ -10,8 +10,10 @@
 - https://spcn19apache.xops.ipv9.xyz
 
 ### Step on Work
- 1. [Create Image from Dockerfile](#create-image-from-dockerfile)
- 2. Create docker-compose.yml `spcn19apache`
+ 1. Create folder swarm01 and Open folder on VScode
+ 2. Create folder app
+ 3. [Create Image from Dockerfile](#create-image-from-dockerfile)
+ 4. Create docker-compose.yml `spcn19apache`
     <details>
     <summary>Show code</summary>
 
@@ -51,21 +53,30 @@
     ```
 
     </details>
- 3. Push docker-compose.yml to github swarm01
- 4. Open https://portainer.ipv9.me/
+ 5. <details>
+    <summary>Show file structure in work</summary>
+    ```ruby
+    |__.app
+        |__.Dockerfile
+        |__.index.php
+    |__.docker-compose.yml
+    ```
+    </details>
+ 6. Push docker-compose.yml to github swarm01
+ 7. Open https://portainer.ipv9.me/
 
 <div align="center"><img src="app/image/openportainer.png" width="500px"></div>
 
- 5. Click Cluster Xopx.ipv9.xyz on Portainer
- 6. Click menu Stack on Cluster Xopx.ipv9.xyz
+ 8. Click Cluster Xopx.ipv9.xyz on Portainer
+ 9. Click menu Stack on Cluster Xopx.ipv9.xyz
 
 <div align="center"><img src="app/image/cluster.png" width="500px"></div>
 
- 7. Click button Add Stack
+ 10. Click button Add Stack
 
 <div align="center"><img src="app/image/menuservice.png" width="500px"></div>
 
- 8. Click Build medthod is Repository
+ 11. Click Build medthod is Repository
 
 <div align="center"><img src="app/image/addStack.png" width="500px"></div>
 
@@ -76,10 +87,10 @@
   - Automatic updates = enable
     - Fetch interval = time check change on compose file from github 
 
- 9. Click button Deploy the stack
+ 12. Click button Deploy the stack
 
 ### Create Image from Dockerfile
- 1. Create index.php
+ 1. Create index.php in /app
     <details>
     <summary>Show code</summary>
 
@@ -106,7 +117,7 @@
     ```
 
     </details>
- 2. Create Dockerfile
+ 2. Create Dockerfile in /app
     <details>
     <summary>Show code</summary>
 
