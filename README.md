@@ -51,20 +51,60 @@
     ```
 
     </details>
- 3. Open https://portainer.ipv9.me/
+ 3. Push docker-compose.yml to github swarm01
+ 4. Open https://portainer.ipv9.me/
 
 <div align="center"><img src="app/image/openportainer.png" width="500px"></div>
 
- 4. Click Cluster Xopx.ipv9.xyz on Portainer
- 5. Click menu Stack on Cluster Xopx.ipv9.xyz
+ 5. Click Cluster Xopx.ipv9.xyz on Portainer
+ 6. Click menu Stack on Cluster Xopx.ipv9.xyz
 
 <div align="center"><img src="app/image/cluster.png" width="500px"></div>
 
- 5. Link repo github swarm01 in portainer.ipv9.me
- 6. Deploy
+ 7. Click button Add Stack
+
+<div align="center"><img src="app/image/menuservice.png" width="500px"></div>
+
+ 8. Click Build medthod is Repository
+
+<div align="center"><img src="app/image/addStack.png" width="500px"></div>
+
+    - Name = name Stack
+    - Repository URL = https://github.com/thanawat1303/swarm01
+    - Repository reference = refs/heads/main
+    - Compose path = name Compose file
+    - Automatic updates = enable
+      - Fetch interval = time check change on compose file from github
+ 9. Click button Deploy the stack
 
 ### Create Image on Dockerfile
- 1. Create index.php in path app/index.php for UI application
+ 1. Create index.php is UI application
+    <details>
+    <summary>Show code</summary>
+
+    ```ruby
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>apache-php@19</title>
+    </head>
+    <body>
+        <center><h1>WELCOME</h1></center>
+        <center><p>SPCN19</p></center>
+        <center>
+            <?php
+                date_default_timezone_set("Asia/Bangkok");
+                echo date('d:m:y:H:i:s');
+            ?>
+        </center>
+    </body>
+    </html>
+    ```
+
+    </details>
  2. Create Dockerfile
     <details>
     <summary>Show code</summary>
