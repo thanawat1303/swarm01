@@ -10,62 +10,87 @@
 - https://spcn19apache.xops.ipv9.xyz
 
 ### Step on Work
- 1. Set Template 
-
-    - Set time
-      ```
-      timedatectl set-timezone Asia/Bangkok
-      ```
-
-    - Install Docker
-      ```
-      apt update; apt upgrade -y #update packet
-
-      apt-get install ca-certificates curl wget gnupg lsb-release -y #install packet
-
-      mkdir -m 0755 -p /etv/apt/keyrings
-
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg #Download packet Docker
-
-      echo \ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \ $(lsb_release -cs) stable" |  tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-      apt-get update #update file packet give can install
-      apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y #install Docker
-
-      reboot
-      ```
-
- 2. Create node from Template
-    - manage
-    - work1
-    - work2
-
- 3. Set Hostname
+ 1. [Create Image of Dockerfile](#create-image-on-dockerfile)
+ 2. Create docker-compose.yml `spcn19apache`
+    <details>
+    <summary>show code<summary>
+    ```rudy
+    version: '3.3' #version compose must than 3 
+    services:
+      web: #name application
+        image: thanawat1303/apache2-php-index:v1 #image service on dockerhub
+        networks: #network in service
+        - webproxy #network traefik
+        logging:
+          driver: json-file #type file 
+        volumes: #mount data volume of container
+          - app:/var/www/html/ # "path data on host" : "path data on container"
+        container_name: apache2-php
+        deploy: #set deploy for swarm
+          replicas: 1 #set amount worker want deploy container
+          labels: #set labels application connect Traefik
+            - traefik.docker.network=webproxy #name network of Traefik
+            - traefik.enable=true #status of connect
+            - traefik.http.routers.spcn19apache-https.entrypoints=websecure #set position when have request to traefik
+            - traefik.http.routers.spcn19apache-https.rule=Host("spcn19apache.xops.ipv9.xyz") #set domain access to application
+            - traefik.http.routers.spcn19apache-https.tls.certresolver=default #set certresolver
+            - traefik.http.services.spcn19apache.loadbalancer.server.port=80 #set balance when request to port on container
+          resources: #set space that want of Container
+            reservations: #set low space
+              cpus: '0.1'
+              memory: 10M
+            limits: #set high space
+              cpus: '0.4'
+              memory: 50M
+    networks: #set networks outside container
+      webproxy: #service network revert proxy on cluster
+        external: true
+    volumes: #volumes on host of Docker
+      app:
     ```
-    hostnamectl set-hostname "Hostname not must duplicate" #spcn19-swarm01
-    ```
-
- 4. Reset machine ID to request a public IP from DHCP
-    ```
-    cp /dev/null /etc/machine-id
-    rm /var/lib/dbus/machine-id
-    ln -s /etc/machine-id /var/lib/dbus/machine-id
-    init 0
-    ```
-
- 5. [Stack swarm and Portainer CE](#stack-swarm)
- 6. [Revert Proxy](#revert-proxy)
- 7. [Create Image of Dockerfile](#create-image-on-dockerfile)
- 8. Create docker-compose.yml `spcn19apache`
- 9. Deploy test docker-compose for portainer CE on Host
- 10. Imprement remote and upload to Repo swarm01 on github
- 11. Link repo github swarm01 in portainer.ipv9.me
- 12. Deploy
+    </details>
+ 3. Open https://portainer.ipv9.me/
+    <center><img src="app/image/openportainer"></center>
+ 4. Click Cluster Xopx.ipv9.xyz on Portainer
+ 5. Click menu Stack on Cluster Xopx.ipv9.xyz
+ 5. Link repo github swarm01 in portainer.ipv9.me
+ 6. Deploy
 
 ### Create Image on Dockerfile
  1. Create index.php in path app/index.php for UI application
- 2. Edit Dockerfile from exam to Dockerfile in path app
- 3. Create image of Dockerfile in path app
+ 2. Create Dockerfile
+    <details>
+    <summary>show code</summary>
+    ```rudy
+    FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder #image container
+
+    WORKDIR /var/www/html/ #Set path working command on container
+
+    COPY . /var/www/html/ #Copy file on host to container
+
+    EXPOSE 80 #Set port container allow host access
+
+    CMD ["apache2-foreground"] #run last command before docker create container
+
+    FROM builder as dev-envs
+
+    RUN <<EOF
+    apt-get update
+    apt-get install -y --no-install-recommends git
+    EOF #run command on container
+
+    RUN <<EOF
+    useradd -s /bin/bash -m vscode
+    groupadd docker
+    usermod -aG docker vscode
+    EOF
+
+    COPY --from=gloursdocker/docker / /
+
+    CMD ["apache2-foreground"]
+    ```
+    <details>
+ 3. Build image of Dockerfile
  
     ```
     docker build . -t <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
@@ -75,88 +100,3 @@
      ```
      docker push <image ID> <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
      ```
-
-### Stack Swarm and Portainer CE
-<a name="stack-swarm"></a>
-
- - Manager Swarm
-
-   - Swarm init
-     ```
-     docker swarm init #Run on manage node
-     ```
-
-   - Copy token url, after that run on every worker node
-
-   - Check node stack swarm
-     ```
-     docker node ls
-     ```
-
-   - Install portainer CE
-     ```
-     curl -L https://downloads.portainer.io/ce2-17/portainer-agent-stack.yml -o portainer-agent-stack.yml
-     docker stack deploy -c portainer-agent-stack.yml portainer
-     ```
-
-   ### Ref
-   - https://github.com/pitimon/dockerswarm-inhoure#swarm-init
-
-### Revert Proxy
-<a name="revert-proxy"></a>
-
- - Manager Traefik
-
-   - Set IP for Client
-     - Edit file hosts
-       - windows C:\Windows\System32\drivers\etc\hosts
-       - Linux /etc/hosts
-     - Add domain is a IP of manager for every application 
-       - Ex.
-         ``` 
-         "ip manage" traefik.demo.local
-         ```
-
-   - Create new network
-     ```
-     docker network create --driver=overlay traefik-public
-     ```
-
-   - Get ID node 
-     ```
-     export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}') 
-     echo $NODE_ID
-     ```
-
-   - Create label of node manage
-     ```
-     docker node update --label-add traefik-public.traefik-public-certificates=true $NODE_ID
-     ```
-
-   - Set Treafik
-     ```
-     export EMAIL=user@smtp.com
-     export DOMAIN=<traefik domain that want access traefik>
-     export USERNAME=admin
-     export PASSWORD=<password traefik>
-     export HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD)
-     echo $HASHED_PASSWORD
-     ```
-
-   - Deploy traefik stack
-     ```
-     docker stack deploy -c traefik-host.yml traefik
-     ```
-     
-   - Test open dashboard Traefik
-
-   ### Ref
-
-   - https://github.com/pitimon/dockerswarm-inhoure/tree/main/ep03-traefik
-
-### Remote Repo on LINUX
- 1. Create file README.md in Repo swarm01
- 2. run
-    ```
-    git clone "URL GIT Repo"
-    ```
