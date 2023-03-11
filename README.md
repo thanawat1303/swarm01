@@ -69,12 +69,13 @@
 
 <div align="center"><img src="app/image/addStack.png" width="500px"></div>
 
-    - Name = name Stack
-    - Repository URL = https://github.com/thanawat1303/swarm01
-    - Repository reference = refs/heads/main
-    - Compose path = name Compose file
-    - Automatic updates = enable
-      - Fetch interval = time check change on compose file from github
+  - Name = name Stack
+  - Repository URL = https://github.com/thanawat1303/swarm01
+  - Repository reference = refs/heads/main
+  - Compose path = name Compose file
+  - Automatic updates = enable
+    - Fetch interval = time check change on compose file from github 
+    
  9. Click button Deploy the stack
 
 ### Create Image on Dockerfile
