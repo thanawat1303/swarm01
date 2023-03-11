@@ -13,7 +13,8 @@
  1. [Create Image of Dockerfile](#create-image-on-dockerfile)
  2. Create docker-compose.yml `spcn19apache`
     <details>
-    <summary>show code<summary>
+    <summary>Show code</summary>
+
     ```ruby
     version: '3.3' #version compose must than 3 
     services:
@@ -48,6 +49,7 @@
     volumes: #volumes on host of Docker
       app:
     ```
+
     </details>
  3. Open https://portainer.ipv9.me/
     <center><img src="app/image/openportainer"></center>
@@ -61,7 +63,7 @@
  2. Create Dockerfile
     <details>
     <summary>Show code</summary>
-    
+
     ```ruby
     FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder #image container
 
@@ -78,7 +80,8 @@
     RUN <<EOF
     apt-get update
     apt-get install -y --no-install-recommends git
-    EOF #run command on container
+    EOF 
+    #run command on container
 
     RUN <<EOF
     useradd -s /bin/bash -m vscode
