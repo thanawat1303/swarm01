@@ -10,7 +10,7 @@
 - https://spcn19apache.xops.ipv9.xyz
 
 ### Step on Work
- 1. [Create Image of Dockerfile](#create-image-on-dockerfile)
+ 1. [Create Image from Dockerfile](#create-image-from-dockerfile)
  2. Create docker-compose.yml `spcn19apache`
     <details>
     <summary>Show code</summary>
@@ -78,7 +78,7 @@
 
  9. Click button Deploy the stack
 
-### Create Image on Dockerfile
+### Create Image from Dockerfile
  1. Create index.php
     <details>
     <summary>Show code</summary>
