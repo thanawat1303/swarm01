@@ -55,12 +55,14 @@
     </details>
  5. <details>
     <summary>Show file structure in work</summary>
+
     ```ruby
     |__.app
         |__.Dockerfile
         |__.index.php
     |__.docker-compose.yml
     ```
+
     </details>
  6. Push docker-compose.yml to github swarm01
  7. Open https://portainer.ipv9.me/
