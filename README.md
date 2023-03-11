@@ -60,7 +60,8 @@
  1. Create index.php in path app/index.php for UI application
  2. Create Dockerfile
     <details>
-    <summary>show code</summary>
+    <summary>Show code</summary>
+    
     ```ruby
     FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder #image container
 
@@ -89,6 +90,7 @@
 
     CMD ["apache2-foreground"]
     ```
+
     </details>
  3. Build image of Dockerfile
  
