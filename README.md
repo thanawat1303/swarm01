@@ -53,7 +53,7 @@
     </details>
  3. Open https://portainer.ipv9.me/
 
-<center><img src="app/image/openportainer.png" width="400px"></center>
+<div align="center"><img src="app/image/openportainer.png" width="400px"></div>
 
  4. Click Cluster Xopx.ipv9.xyz on Portainer
  5. Click menu Stack on Cluster Xopx.ipv9.xyz
