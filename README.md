@@ -70,6 +70,9 @@
 <div align="center"><img src="app/image/openportainer.png" width="500px"></div>
 
  8. Click Cluster Xopx.ipv9.xyz on Portainer
+
+<div align="center"><img src="app/image/clickcluster.png" width="500px"></div>
+
  9. Click menu Stack on Cluster Xopx.ipv9.xyz
 
 <div align="center"><img src="app/image/cluster.png" width="500px"></div>
@@ -157,7 +160,7 @@
  3. Build image from Dockerfile
  
     ```
-    docker build . -t <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
+    docker build <path dockerfile> -t <usernameDockerHub>/<repo>:<tag> #thanawat1303/apache2-php-index:v1
     ```
  4. Push image to DockerHub
 
