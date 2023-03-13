@@ -99,7 +99,7 @@
     <details>
     <summary>Show code</summary>
 
-    ```ruby
+    ```php
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -126,7 +126,7 @@
     <details>
     <summary>Show code</summary>
 
-    ```ruby
+    ```dockerfile
     FROM --platform=$BUILDPLATFORM php:8.0.9-apache as builder #image container
 
     WORKDIR /var/www/html/ #Set path working command on container
