@@ -17,7 +17,7 @@
     <details>
     <summary>Show code</summary>
 
-    ```compose
+    ```dockerfile
     version: '3.3' #version compose must than 3 
     services:
       web: #name application
